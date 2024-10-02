@@ -45,7 +45,10 @@ func main () {
 
 	fs := http.FileServer(http.Dir("./dist"))
 	http.Handle("/", fs)
-	
+	http.Handle("/maps", fs)
+	http.Handle("/add", fs)
+	http.Handle("/synergy", fs)
+	http.Handle("/matchup", fs)
 	http.HandleFunc("/api/history", withCORS(handlers.GetStatsHandler(app, ctx, "matchHistory")))
 	http.HandleFunc("/api/matchups", withCORS(handlers.GetStatsHandler(app, ctx, "matchUp")))
 	http.HandleFunc("/api/synergy", withCORS(handlers.GetStatsHandler(app, ctx, "synergy")))
