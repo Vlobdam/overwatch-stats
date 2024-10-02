@@ -1,6 +1,6 @@
 module github.com/Vlobdam/overwatch-stats
 
-go 1.23.0
+go 1.23.2
 
 require (
 	firebase.google.com/go/v4 v4.14.1
