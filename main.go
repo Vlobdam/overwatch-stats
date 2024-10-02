@@ -13,7 +13,7 @@ import (
 )
 
 var app *firebase.App
-var path string
+var credsJSON string
 var url string
 
 func init () {
@@ -21,7 +21,7 @@ func init () {
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}
-	path = os.Getenv("PATH_TO_DB_KEY")
+	credsJSON = os.Getenv("FIREBASE_CREDENTIALS")
 	url = os.Getenv("RTDB_URL")
 }
 
@@ -43,7 +43,7 @@ func withCORS(h http.HandlerFunc) http.HandlerFunc {
 func main () {
 	ctx := context.Background()
 	
-	app = dbHelper.InitializeApp(ctx, path, url)
+	app = dbHelper.InitializeApp(ctx, credsJSON, url)
 
 	fs := http.FileServer(http.Dir("./dist"))
 	http.Handle("/", fs)

@@ -2,6 +2,7 @@ package dbHelper
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	firebase "firebase.google.com/go/v4"
@@ -9,8 +10,16 @@ import (
 	"google.golang.org/api/option"
 )
 
-func InitializeApp (ctx context.Context, path string, url string) *firebase.App {
-	opt := option.WithCredentialsFile(path)
+func InitializeApp (ctx context.Context, credsJSON string, url string) *firebase.App {
+
+	var credsMap map[string]interface{}
+
+	err := json.Unmarshal([]byte(credsJSON), &credsMap)
+	if err != nil {
+		log.Fatalf("error parsing credentials JSON: %v", err)
+	}
+
+	opt := option.WithCredentialsJSON([]byte(credsJSON))
 	
 	conf := &firebase.Config{
 		DatabaseURL: url,
