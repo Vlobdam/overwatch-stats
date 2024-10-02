@@ -10,7 +10,6 @@ import (
 	firebase "firebase.google.com/go/v4"
 	"github.com/Vlobdam/overwatch-stats/dbHelper"
 	"github.com/Vlobdam/overwatch-stats/handlers"
-	"github.com/joho/godotenv"
 )
 
 var app *firebase.App
@@ -19,12 +18,9 @@ var url string
 var port string
 
 func init () {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("error loading .env file")
-	}
 	credsJSON = os.Getenv("FIREBASE_CREDENTIALS")
 	url = os.Getenv("RTDB_URL")
+	port = os.Getenv("PORT")
 }
 
 func withCORS(h http.HandlerFunc) http.HandlerFunc {
@@ -57,6 +53,5 @@ func main () {
 
 	http.HandleFunc("/api/match", withCORS(handlers.PostNewMatchHandler(app)))
 	
-	// Start HTTP server
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
