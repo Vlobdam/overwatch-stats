@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	firebase "firebase.google.com/go/v4"
-	"github.com/vlobdam/overwatch-stats-backend/dbHelper"
+	"github.com/Vlobdam/overwatch-stats/dbHelper"
 )
 
 func GetStatsHandler(app *firebase.App, ctx context.Context, key string) http.HandlerFunc {

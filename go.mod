@@ -1,4 +1,4 @@
-module github.com/vlobdam/overwatch-stats-backend
+module github.com/Vlobdam/overwatch-stats
 
 go 1.23.0
 

@@ -8,8 +8,8 @@ import (
 
 	firebase  "firebase.google.com/go/v4"
 	"github.com/joho/godotenv"
-	"github.com/vlobdam/overwatch-stats-backend/dbHelper"
-	"github.com/vlobdam/overwatch-stats-backend/handlers"
+	"github.com/Vlobdam/overwatch-stats/dbHelper"
+	"github.com/Vlobdam/overwatch-stats/handlers"
 )
 
 var app *firebase.App

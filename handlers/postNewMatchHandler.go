@@ -8,8 +8,8 @@ import (
 
 	firebase "firebase.google.com/go/v4"
 	db "firebase.google.com/go/v4/db"
-	"github.com/vlobdam/overwatch-stats-backend/consts"
-	"github.com/vlobdam/overwatch-stats-backend/dbHelper"
+	"github.com/Vlobdam/overwatch-stats/consts"
+	"github.com/Vlobdam/overwatch-stats/dbHelper"
 )
 
 type MatchData struct {
