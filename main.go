@@ -2,19 +2,21 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	firebase  "firebase.google.com/go/v4"
-	"github.com/joho/godotenv"
+	firebase "firebase.google.com/go/v4"
 	"github.com/Vlobdam/overwatch-stats/dbHelper"
 	"github.com/Vlobdam/overwatch-stats/handlers"
+	"github.com/joho/godotenv"
 )
 
 var app *firebase.App
 var credsJSON string
 var url string
+var port string
 
 func init () {
 	err := godotenv.Load()
@@ -56,5 +58,5 @@ func main () {
 	http.HandleFunc("/api/match", withCORS(handlers.PostNewMatchHandler(app)))
 	
 	// Start HTTP server
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
