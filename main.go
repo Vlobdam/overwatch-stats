@@ -10,6 +10,7 @@ import (
 	firebase "firebase.google.com/go/v4"
 	"github.com/Vlobdam/overwatch-stats/dbHelper"
 	"github.com/Vlobdam/overwatch-stats/handlers"
+	"github.com/gorilla/mux"
 )
 
 var app *firebase.App
@@ -38,23 +39,34 @@ func withCORS(h http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func main () {
+func main() {
 	ctx := context.Background()
-	
+
 	app = dbHelper.InitializeApp(ctx, credsJSON, url)
 
-	fs := http.FileServer(http.Dir("./dist"))
-	http.Handle("/", fs)
-	http.Handle("/maps", fs)
-	http.Handle("/add", fs)
-	http.Handle("/synergy", fs)
-	http.Handle("/matchup", fs)
-	http.HandleFunc("/api/history", withCORS(handlers.GetStatsHandler(app, ctx, "matchHistory")))
-	http.HandleFunc("/api/matchups", withCORS(handlers.GetStatsHandler(app, ctx, "matchUp")))
-	http.HandleFunc("/api/synergy", withCORS(handlers.GetStatsHandler(app, ctx, "synergy")))
-	http.HandleFunc("/api/maps", withCORS(handlers.GetStatsHandler(app, ctx, "mapPerformance")))
+	// Create a new router
+	r := mux.NewRouter()
 
-	http.HandleFunc("/api/match", withCORS(handlers.PostNewMatchHandler(app)))
-	
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
+	// API routes
+	r.HandleFunc("/api/history", withCORS(handlers.GetStatsHandler(app, ctx, "matchHistory")))
+	r.HandleFunc("/api/matchups", withCORS(handlers.GetStatsHandler(app, ctx, "matchUp")))
+	r.HandleFunc("/api/synergy", withCORS(handlers.GetStatsHandler(app, ctx, "synergy")))
+	r.HandleFunc("/api/maps", withCORS(handlers.GetStatsHandler(app, ctx, "mapPerformance")))
+	r.HandleFunc("/api/match", withCORS(handlers.PostNewMatchHandler(app)))
+
+	// Custom handler for React routes (SPA)
+	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Try to serve a static file, if it exists
+		path := "./dist" + r.URL.Path
+		if _, err := os.Stat(path); err == nil {
+			http.ServeFile(w, r, path)
+			return
+		}
+
+		// If the file does not exist, serve the SPA's index.html
+		http.ServeFile(w, r, "./dist/index.html")
+	})
+
+	// Start the server
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), r))
 }

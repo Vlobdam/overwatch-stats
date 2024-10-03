@@ -4,6 +4,7 @@ go 1.22.0
 
 require (
 	firebase.google.com/go/v4 v4.14.1
+	github.com/gorilla/mux v1.8.1
 	google.golang.org/api v0.198.0
 )
 
